@@ -87,7 +87,7 @@ const LoginScreen = ({ navigation }) => {
                                 setPassword(text);
                                 setErrors(prev => ({ ...prev, password: '' }));
                             }}
-                            placeholder="Enter your password"
+                            placeholder="Enter your passwordd"
                             secureTextEntry
                             showPasswordToggle
                             error={errors.password}

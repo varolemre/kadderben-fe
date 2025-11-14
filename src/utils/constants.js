@@ -27,4 +27,5 @@ export const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',
     GOOGLE_LOGIN: '/auth/google',
     APPLE_LOGIN: '/auth/apple',
+    ONBOARDING: '/onboarding',
 };

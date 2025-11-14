@@ -10,11 +10,13 @@ const useAuthStore = create((set, get) => ({
     isAuthenticated: false,
     isLoading: false,
     error: null,
+    shouldShowOnboarding: false, // Only true after fresh login/register, not on app restart
 
     // Actions
 
     /**
      * Initialize auth state from storage (on app start)
+     * If user hasn't completed onboarding, logout and redirect to login
      */
     initAuth: async () => {
         set({ isLoading: true });
@@ -23,19 +25,36 @@ const useAuthStore = create((set, get) => ({
             const user = await getUser();
 
             if (tokens && user) {
-                set({
-                    user,
-                    accessToken: tokens.accessToken,
-                    refreshToken: tokens.refreshToken,
-                    isAuthenticated: true,
-                    isLoading: false,
-                });
+                // If user hasn't completed onboarding, logout and redirect to login
+                if (!user.onboardingCompleted) {
+                    // Clear storage and state
+                    await deleteTokens();
+                    await deleteUser();
+                    set({
+                        user: null,
+                        accessToken: null,
+                        refreshToken: null,
+                        isAuthenticated: false,
+                        isLoading: false,
+                        shouldShowOnboarding: false,
+                    });
+                } else {
+                    // User completed onboarding, allow access
+                    set({
+                        user,
+                        accessToken: tokens.accessToken,
+                        refreshToken: tokens.refreshToken,
+                        isAuthenticated: true,
+                        isLoading: false,
+                        shouldShowOnboarding: false,
+                    });
+                }
             } else {
-                set({ isLoading: false });
+                set({ isLoading: false, shouldShowOnboarding: false });
             }
         } catch (error) {
             console.error('Init auth error:', error);
-            set({ isLoading: false });
+            set({ isLoading: false, shouldShowOnboarding: false });
         }
     },
 
@@ -54,6 +73,8 @@ const useAuthStore = create((set, get) => ({
             await saveUser(user);
 
             // Update state
+            // Show onboarding only if user hasn't completed it (fresh login)
+            const needsOnboarding = !user.onboardingCompleted;
             set({
                 user,
                 accessToken,
@@ -61,6 +82,7 @@ const useAuthStore = create((set, get) => ({
                 isAuthenticated: true,
                 isLoading: false,
                 error: null,
+                shouldShowOnboarding: needsOnboarding,
             });
 
             return { success: true };
@@ -89,6 +111,8 @@ const useAuthStore = create((set, get) => ({
             await saveUser(user);
 
             // Update state
+            // Show onboarding only if user hasn't completed it (fresh register)
+            const needsOnboarding = !user.onboardingCompleted;
             set({
                 user,
                 accessToken,
@@ -96,6 +120,7 @@ const useAuthStore = create((set, get) => ({
                 isAuthenticated: true,
                 isLoading: false,
                 error: null,
+                shouldShowOnboarding: needsOnboarding,
             });
 
             return { success: true };
@@ -126,6 +151,7 @@ const useAuthStore = create((set, get) => ({
                 isAuthenticated: false,
                 isLoading: false,
                 error: null,
+                shouldShowOnboarding: false,
             });
 
             return { success: true };
@@ -142,6 +168,7 @@ const useAuthStore = create((set, get) => ({
                 isAuthenticated: false,
                 isLoading: false,
                 error: null,
+                shouldShowOnboarding: false,
             });
 
             return { success: true };
@@ -160,6 +187,13 @@ const useAuthStore = create((set, get) => ({
         const updatedUser = { ...get().user, ...userData };
         await saveUser(updatedUser);
         set({ user: updatedUser });
+    },
+
+    /**
+     * Complete onboarding (hide onboarding screens)
+     */
+    completeOnboarding: () => {
+        set({ shouldShowOnboarding: false });
     },
 }));
 

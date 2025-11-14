@@ -9,13 +9,19 @@ import { Loading } from '../components';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
+// Onboarding Screens
+import OnboardingStep1 from '../screens/onboarding/OnboardingStep1';
+import OnboardingStep2 from '../screens/onboarding/OnboardingStep2';
+import OnboardingStep3 from '../screens/onboarding/OnboardingStep3';
+import OnboardingStep4 from '../screens/onboarding/OnboardingStep4';
+
 // App Screens
 import HomeScreen from '../screens/home/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-    const { isAuthenticated, isLoading, initAuth } = useAuthStore();
+    const { isAuthenticated, isLoading, initAuth, shouldShowOnboarding } = useAuthStore();
 
     // Initialize auth on app start
     useEffect(() => {
@@ -35,10 +41,20 @@ const AppNavigator = () => {
                     animation: 'slide_from_right',
                 }}>
                 {isAuthenticated ? (
-                    // Authenticated Stack
-                    <>
-                        <Stack.Screen name="Home" component={HomeScreen} />
-                    </>
+                    shouldShowOnboarding ? (
+                        // Onboarding Stack (only after fresh login/register)
+                        <>
+                            <Stack.Screen name="OnboardingStep1" component={OnboardingStep1} />
+                            <Stack.Screen name="OnboardingStep2" component={OnboardingStep2} />
+                            <Stack.Screen name="OnboardingStep3" component={OnboardingStep3} />
+                            <Stack.Screen name="OnboardingStep4" component={OnboardingStep4} />
+                        </>
+                    ) : (
+                        // Authenticated Stack
+                        <>
+                            <Stack.Screen name="Home" component={HomeScreen} />
+                        </>
+                    )
                 ) : (
                     // Auth Stack
                     <>

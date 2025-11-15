@@ -8,6 +8,7 @@ import {
     Modal,
 } from 'react-native';
 import Text from './Text';
+import { COLORS } from '../utils/constants';
 
 const Dropdown = ({
     label,
@@ -85,6 +86,8 @@ const Dropdown = ({
                                     )}
                                 </TouchableOpacity>
                             )}
+                            contentContainerStyle={styles.flatListContent}
+                            showsVerticalScrollIndicator={true}
                         />
                     </View>
                 </TouchableOpacity>
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#333',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     required: {
@@ -149,6 +152,10 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         maxHeight: '70%',
+        flexGrow: 0,
+    },
+    flatListContent: {
+        paddingBottom: 40,
     },
     modalHeader: {
         flexDirection: 'row',

@@ -63,7 +63,7 @@ const LoginWithEmailScreen = ({ navigation }) => {
                     <TouchableOpacity 
                         style={styles.backButton}
                         onPress={() => navigation.goBack()}>
-                        <Text style={styles.backButtonText}>← Geri</Text>
+                        <Text style={styles.backButtonText}>←</Text>
                     </TouchableOpacity>
 
                     <View style={styles.header}>
@@ -141,12 +141,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 16,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     form: {
         marginBottom: 32,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontSize: 14,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     linkText: {
         fontSize: 14,
@@ -174,12 +174,14 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     backButtonText: {
-        fontSize: 16,
+        fontSize: 24,
         color: '#FFFFFF',
         fontWeight: '600',
     },
     input: {
         marginBottom: 8,
+        color: COLORS.SECOND,
+        textColor: COLORS.SECOND,
     },
 });
 

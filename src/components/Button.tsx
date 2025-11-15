@@ -6,6 +6,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import Text from './Text';
+import { COLORS } from '../utils/constants';
 
 const Button = ({
                     title,
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
     },
     outlineText: {
-        color: '#007AFF',
+        color: COLORS.SECOND,
     },
 });
 

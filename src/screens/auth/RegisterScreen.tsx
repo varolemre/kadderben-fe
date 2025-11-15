@@ -85,6 +85,12 @@ const RegisterScreen = ({ navigation }) => {
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled">
 
+                    <TouchableOpacity 
+                        style={styles.backButton}
+                        onPress={() => navigation.goBack()}>
+                        <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+
                     <View style={styles.header}>
                         <Text style={styles.title}>Create Account</Text>
                         <Text style={styles.subtitle}>Sign up to get started</Text>
@@ -135,7 +141,7 @@ const RegisterScreen = ({ navigation }) => {
                             title="Sign Up"
                             onPress={handleRegister}
                             loading={isLoading}
-                            style={styles.registerButton}
+                            style={[styles.registerButton, { backgroundColor: COLORS.MAIN }]}
                         />
 
                         <View style={styles.footer}>
@@ -171,12 +177,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 16,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     form: {
         marginBottom: 32,
@@ -192,11 +198,21 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontSize: 14,
-        color: '#666',
+        color: COLORS.SECOND,
+
     },
     linkText: {
         fontSize: 14,
-        color: '#007AFF',
+        color: COLORS.MAIN,
+        fontWeight: '600',
+    },
+    backButton: {
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+    },
+    backButtonText: {
+        fontSize: 24,
+        color: '#FFFFFF',
         fontWeight: '600',
     },
 });

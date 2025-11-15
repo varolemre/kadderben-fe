@@ -40,9 +40,10 @@ const OnboardingStep3 = ({ navigation }) => {
     const getInitialDate = () => {
         if (formData.birthDate) {
             const [year, month, day] = formData.birthDate.split('-');
-            return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            // Create date at noon to avoid timezone issues
+            return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0);
         }
-        return new Date(2000, 0, 1); // Default to Jan 1, 2000
+        return new Date(2000, 0, 1, 12, 0, 0); // Default to Jan 1, 2000 at noon
     };
 
     // Get initial time from formData or use current time
@@ -70,11 +71,19 @@ const OnboardingStep3 = ({ navigation }) => {
             }
         }
         if (date) {
-            setSelectedDate(date);
+            // Extract date components directly from the picker date
+            // Use local date methods to get the exact day/month/year selected
             const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const formattedDate = `${year}-${month}-${day}`;
+            const month = date.getMonth();
+            const day = date.getDate();
+            
+            // Create a new date object at noon to avoid timezone boundary issues
+            // This ensures the date stays on the selected day regardless of timezone
+            const localDate = new Date(year, month, day, 12, 0, 0, 0);
+            setSelectedDate(localDate);
+            
+            // Format date as YYYY-MM-DD using the extracted components
+            const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             updateField('birthDate', formattedDate);
             if (Platform.OS === 'ios') {
                 setShowDatePicker(false);
@@ -89,12 +98,13 @@ const OnboardingStep3 = ({ navigation }) => {
                 return;
             }
         }
-        if (time && !showDontKnowTime) {
+        if (time) {
             setSelectedTime(time);
             const hours = String(time.getHours()).padStart(2, '0');
             const minutes = String(time.getMinutes()).padStart(2, '0');
             const formattedTime = `${hours}:${minutes}`;
             updateField('birthTime', formattedTime);
+            setShowDontKnowTime(false); // Hide "Bilmiyorum" option when time is selected
             if (Platform.OS === 'ios') {
                 setShowTimePicker(false);
             }
@@ -129,6 +139,12 @@ const OnboardingStep3 = ({ navigation }) => {
                 <ScrollView
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled">
+                    <TouchableOpacity 
+                        style={styles.backButtonIcon}
+                        onPress={() => navigation.goBack()}>
+                        <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+
                     <View style={styles.header}>
                         <Text style={styles.title}>Doğum Bilgileri</Text>
                         <Text style={styles.subtitle}>Doğum tarihinizi ve saatini seçin</Text>
@@ -143,7 +159,9 @@ const OnboardingStep3 = ({ navigation }) => {
                                 style={styles.dateTimeButton}
                                 onPress={() => setShowDatePicker(true)}>
                                 <Text style={[styles.dateTimeText, !formData.birthDate && styles.placeholder]}>
-                                    {formData.birthDate ? formatDateForDisplay(formData.birthDate) : 'GG/AA/YYYY seçin'}
+                                    {formData.birthDate 
+                                        ? `${String(selectedDate.getDate()).padStart(2, '0')}/${String(selectedDate.getMonth() + 1).padStart(2, '0')}/${selectedDate.getFullYear()}`
+                                        : 'Doğum tarihinizi seçin'}
                                 </Text>
                                 <Text style={styles.arrow}>📅</Text>
                             </TouchableOpacity>
@@ -169,9 +187,13 @@ const OnboardingStep3 = ({ navigation }) => {
                                     <TouchableOpacity
                                         style={styles.dateTimeButton}
                                         onPress={() => setShowTimePicker(true)}>
-                                        <Text style={styles.dateTimeText}>
-                                            {formData.birthTime || 'Saat seçin'}
-                                        </Text>
+                                        <View style={styles.dateTimeTextContainer}>
+                                            <Text 
+                                                style={[styles.dateTimeText, !formData.birthTime && styles.placeholder]}
+                                                numberOfLines={1}>
+                                                {formData.birthTime || 'Saat seçin'}
+                                            </Text>
+                                        </View>
                                         <Text style={styles.arrow}>🕐</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -212,7 +234,13 @@ const OnboardingStep3 = ({ navigation }) => {
                                             display="spinner"
                                             onChange={(event, date) => {
                                                 if (date) {
-                                                    setSelectedDate(date);
+                                                    // Extract date components directly from the picker date
+                                                    const year = date.getFullYear();
+                                                    const month = date.getMonth();
+                                                    const day = date.getDate();
+                                                    // Create a new date object at noon to avoid timezone boundary issues
+                                                    const localDate = new Date(year, month, day, 12, 0, 0, 0);
+                                                    setSelectedDate(localDate);
                                                 }
                                             }}
                                             maximumDate={new Date()}
@@ -236,9 +264,7 @@ const OnboardingStep3 = ({ navigation }) => {
                                             </TouchableOpacity>
                                             <Text style={styles.modalTitle}>Doğum Saati</Text>
                                             <TouchableOpacity onPress={() => {
-                                                if (selectedTime) {
-                                                    handleTimeChange({ type: 'set' }, selectedTime);
-                                                }
+                                                setShowTimePicker(false);
                                             }}>
                                                 <Text style={styles.modalDone}>Tamam</Text>
                                             </TouchableOpacity>
@@ -249,7 +275,14 @@ const OnboardingStep3 = ({ navigation }) => {
                                             display="spinner"
                                             onChange={(event, time) => {
                                                 if (time) {
+                                                    // Update both state and store immediately when time changes
+                                                    const hours = String(time.getHours()).padStart(2, '0');
+                                                    const minutes = String(time.getMinutes()).padStart(2, '0');
+                                                    const formattedTime = `${hours}:${minutes}`;
+                                                    console.log('Time selected:', formattedTime, 'Time object:', time);
                                                     setSelectedTime(time);
+                                                    updateField('birthTime', formattedTime);
+                                                    setShowDontKnowTime(false);
                                                 }
                                             }}
                                             is24Hour={true}
@@ -291,13 +324,14 @@ const OnboardingStep3 = ({ navigation }) => {
                             title="Geri"
                             onPress={handleBack}
                             variant="outline"
-                            style={styles.backButton}
+                            style={[styles.backButton, { borderColor: COLORS.MAIN }]}
+                            textStyle={{ color: COLORS.SECOND }}
                         />
                         <Button
                             title="Devam Et"
                             onPress={handleNext}
                             disabled={!isFormValid}
-                            style={styles.nextButton}
+                            style={[styles.nextButton, { backgroundColor: COLORS.MAIN }]}
                         />
                     </View>
                 </ScrollView>
@@ -325,12 +359,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 16,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     form: {
         flex: 1,
@@ -341,7 +375,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#333',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     required: {
@@ -358,17 +392,21 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#FFFFFF',
     },
+    dateTimeTextContainer: {
+        flex: 1,
+        marginRight: 8,
+        minWidth: 0, // Allow container to shrink
+    },
     dateTimeText: {
         fontSize: 16,
         color: '#000',
-        flex: 1,
     },
     placeholder: {
         color: '#999',
     },
     arrow: {
         fontSize: 20,
-        marginLeft: 8,
+        width: 24, // Fixed width for arrow
     },
     timeOptionsContainer: {
         flexDirection: 'row',
@@ -399,7 +437,7 @@ const styles = StyleSheet.create({
     },
     dontKnowText: {
         fontSize: 14,
-        color: '#007AFF',
+        color: COLORS.SECOND,
     },
     footer: {
         marginTop: 24,
@@ -411,6 +449,15 @@ const styles = StyleSheet.create({
     },
     nextButton: {
         flex: 1,
+    },
+    backButtonIcon: {
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+    },
+    backButtonText: {
+        fontSize: 24,
+        color: '#FFFFFF',
+        fontWeight: '600',
     },
     modalOverlay: {
         flex: 1,

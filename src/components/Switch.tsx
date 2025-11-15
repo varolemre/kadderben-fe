@@ -3,9 +3,9 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Text from './Text';
 
-const Switch = ({ value, onValueChange, label, disabled = false }) => {
+const Switch = ({ value, onValueChange, label, disabled = false, style }) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             {label && <Text style={styles.label}>{label}</Text>}
             <TouchableOpacity
                 style={[
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 16,
+        width: '100%',
     },
     label: {
         fontSize: 16,

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Dropdown, Text } from '../../components';
 import useOnboardingStore from '../../store/onboardingStore';
@@ -26,6 +26,12 @@ const OnboardingStep1 = ({ navigation }) => {
                 <ScrollView
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled">
+                    <TouchableOpacity 
+                        style={styles.backButton}
+                        onPress={() => navigation.goBack()}>
+                        <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+
                     <View style={styles.header}>
                         <Text style={styles.title}>Kişisel Bilgiler</Text>
                         <Text style={styles.subtitle}>Cinsiyetinizi ve ilişki durumunuzu seçin</Text>
@@ -83,12 +89,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 16,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     form: {
         flex: 1,
@@ -98,6 +104,16 @@ const styles = StyleSheet.create({
     },
     nextButton: {
         marginTop: 8,
+        backgroundColor: COLORS.MAIN,
+    },
+    backButton: {
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+    },
+    backButtonText: {
+        fontSize: 24,
+        color: '#FFFFFF',
+        fontWeight: '600',
     },
 });
 

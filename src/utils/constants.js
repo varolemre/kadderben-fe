@@ -34,7 +34,7 @@ export const API_ENDPOINTS = {
 export const COLORS = {
     BACKGROUND: '#92487A',
     MAIN: '#E0C36C', // Altın/sarı tonu
-    SECOND: '#C77DFF', // Açık mor-pembe (second color için öneri)
+    SECOND: '#F8F4EC', // BEYAZ
 };
 
 // App Fonts

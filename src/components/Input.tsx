@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Text from './Text';
 import TextInput from './TextInput';
+import { COLORS } from '../utils/constants';
 
 const COMMON_EMAIL_DOMAINS = [
     'gmail.com',
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#333',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     inputContainer: {

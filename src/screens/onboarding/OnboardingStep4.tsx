@@ -7,6 +7,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     Alert,
+    TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Switch, Text } from '../../components';
@@ -70,6 +71,12 @@ const OnboardingStep4 = ({ navigation }) => {
                 <ScrollView
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled">
+                    <TouchableOpacity 
+                        style={styles.backButtonIcon}
+                        onPress={() => navigation.goBack()}>
+                        <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+
                     <View style={styles.header}>
                         <Text style={styles.title}>Hoş Geldiniz! 🎉</Text>
                         <Text style={styles.subtitle}>
@@ -83,6 +90,7 @@ const OnboardingStep4 = ({ navigation }) => {
                                 label="Bildirimleri Etkinleştir"
                                 value={formData.notificationsEnabled}
                                 onValueChange={(value) => updateField('notificationsEnabled', value)}
+                                style={styles.switchStyle}
                             />
                         </View>
                     </View>
@@ -92,14 +100,15 @@ const OnboardingStep4 = ({ navigation }) => {
                             title="Geri"
                             onPress={handleBack}
                             variant="outline"
-                            style={styles.backButton}
+                            style={[styles.backButton, { borderColor: COLORS.MAIN }]}
+                            textStyle={{ color: COLORS.SECOND }}
                             disabled={isLoading}
                         />
                         <Button
                             title="Haydi Başlayalım"
                             onPress={handleComplete}
                             loading={isLoading}
-                            style={styles.completeButton}
+                            style={[styles.completeButton, { backgroundColor: COLORS.MAIN }]}
                         />
                     </View>
                 </ScrollView>
@@ -127,12 +136,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 16,
-        color: '#666',
+        color: COLORS.SECOND,
         lineHeight: 24,
     },
     content: {
@@ -143,6 +152,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#F9F9F9',
         borderRadius: 12,
         padding: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    switchStyle: {
+        marginBottom: 0,
     },
     footer: {
         marginTop: 24,
@@ -154,6 +168,15 @@ const styles = StyleSheet.create({
     },
     completeButton: {
         flex: 2,
+    },
+    backButtonIcon: {
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+    },
+    backButtonText: {
+        fontSize: 24,
+        color: '#FFFFFF',
+        fontWeight: '600',
     },
 });
 

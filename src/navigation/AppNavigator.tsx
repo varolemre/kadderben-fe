@@ -17,7 +17,7 @@ import OnboardingStep3 from '../screens/onboarding/OnboardingStep3';
 import OnboardingStep4 from '../screens/onboarding/OnboardingStep4';
 
 // App Screens
-import HomeScreen from '../screens/home/HomeScreen';
+import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,10 +58,8 @@ const AppNavigator = () => {
                             <Stack.Screen name="OnboardingStep4" component={OnboardingStep4} />
                         </>
                     ) : (
-                        // Authenticated Stack
-                        <>
-                            <Stack.Screen name="Home" component={HomeScreen} />
-                        </>
+                        // Authenticated Stack - Tab Navigator
+                        <Stack.Screen name="MainTabs" component={TabNavigator} />
                     )
                 ) : (
                     // Auth Stack

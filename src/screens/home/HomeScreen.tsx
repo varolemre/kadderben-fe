@@ -88,17 +88,17 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#000',
+        color: COLORS.SECOND,
         marginBottom: 8,
     },
     subtitle: {
         fontSize: 20,
-        color: '#333',
+        color: COLORS.SECOND,
         marginBottom: 4,
     },
     email: {
         fontSize: 14,
-        color: '#666',
+        color: COLORS.SECOND,
     },
     infoCard: {
         backgroundColor: '#FFFFFF',

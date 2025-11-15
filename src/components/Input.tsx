@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import {
     View,
-    TextInput,
-    Text,
     StyleSheet,
     TouchableOpacity,
     FlatList,
 } from 'react-native';
+import Text from './Text';
+import TextInput from './TextInput';
 
 const COMMON_EMAIL_DOMAINS = [
     'gmail.com',

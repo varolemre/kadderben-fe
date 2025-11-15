@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     KeyboardAvoidingView,
     Platform,
@@ -11,8 +10,9 @@ import {
     Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Input } from '../../components';
+import { Button, Input, Text } from '../../components';
 import useAuthStore from '../../store/authStore';
+import { COLORS } from '../../utils/constants';
 
 const RegisterScreen = ({ navigation }) => {
     const [formData, setFormData] = useState({
@@ -155,7 +155,7 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.BACKGROUND,
     },
     keyboardView: {
         flex: 1,

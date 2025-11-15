@@ -29,3 +29,15 @@ export const API_ENDPOINTS = {
     APPLE_LOGIN: '/auth/apple',
     ONBOARDING: '/onboarding',
 };
+
+// App Colors
+export const COLORS = {
+    BACKGROUND: '#92487A',
+    MAIN: '#E0C36C', // Altın/sarı tonu
+    SECOND: '#C77DFF', // Açık mor-pembe (second color için öneri)
+};
+
+// App Fonts
+export const FONTS = {
+    REGULAR: 'RedHatDisplay-Regular',
+};

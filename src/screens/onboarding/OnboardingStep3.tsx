@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     ScrollView,
     KeyboardAvoidingView,
@@ -11,8 +10,9 @@ import {
     Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '../../components';
+import { Button, Text } from '../../components';
 import useOnboardingStore from '../../store/onboardingStore';
+import { COLORS } from '../../utils/constants';
 
 // Import DateTimePicker
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -309,7 +309,7 @@ const OnboardingStep3 = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.BACKGROUND,
     },
     keyboardView: {
         flex: 1,

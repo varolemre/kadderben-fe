@@ -1,14 +1,15 @@
 // @ts-nocheck
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Dropdown } from '../../components';
+import { Button, Dropdown, Text } from '../../components';
 import useOnboardingStore from '../../store/onboardingStore';
 import {
     COUNTRY_OPTIONS,
     CITY_OPTIONS,
     OCCUPATION_OPTIONS,
 } from '../../utils/onboardingData';
+import { COLORS } from '../../utils/constants';
 
 const OnboardingStep2 = ({ navigation }) => {
     const { formData, updateField } = useOnboardingStore();
@@ -91,7 +92,7 @@ const OnboardingStep2 = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.BACKGROUND,
     },
     keyboardView: {
         flex: 1,

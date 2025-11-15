@@ -2,13 +2,13 @@
 import React from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '../../components';
+import { Button, Text } from '../../components';
 import useAuthStore from '../../store/authStore';
+import { COLORS } from '../../utils/constants';
 
 const HomeScreen = () => {
     const { user, logout } = useAuthStore();
@@ -72,7 +72,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: COLORS.BACKGROUND,
     },
     content: {
         flex: 1,

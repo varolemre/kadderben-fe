@@ -2,10 +2,10 @@
 import React from 'react';
 import {
     TouchableOpacity,
-    Text,
     StyleSheet,
     ActivityIndicator,
 } from 'react-native';
+import Text from './Text';
 
 const Button = ({
                     title,

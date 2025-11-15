@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     ScrollView,
     KeyboardAvoidingView,
@@ -10,10 +9,11 @@ import {
     Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Switch } from '../../components';
+import { Button, Switch, Text } from '../../components';
 import useOnboardingStore from '../../store/onboardingStore';
 import useAuthStore from '../../store/authStore';
 import * as onboardingApi from '../../api/onboardingApi';
+import { COLORS } from '../../utils/constants';
 
 const OnboardingStep4 = ({ navigation }) => {
     const { formData, updateField, resetForm } = useOnboardingStore();
@@ -111,7 +111,7 @@ const OnboardingStep4 = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.BACKGROUND,
     },
     keyboardView: {
         flex: 1,

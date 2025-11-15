@@ -7,6 +7,7 @@ import { Loading } from '../components';
 
 // Auth Screens
 import LoginScreen from '../screens/auth/LoginScreen';
+import LoginWithEmailScreen from '../screens/auth/LoginWithEmailScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
 // Onboarding Screens
@@ -59,6 +60,7 @@ const AppNavigator = () => {
                     // Auth Stack
                     <>
                         <Stack.Screen name="Login" component={LoginScreen} />
+                        <Stack.Screen name="LoginWithEmail" component={LoginWithEmailScreen} />
                         <Stack.Screen name="Register" component={RegisterScreen} />
                     </>
                 )}

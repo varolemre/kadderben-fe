@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     TouchableOpacity,
     FlatList,
     Modal,
 } from 'react-native';
+import Text from './Text';
 
 const Dropdown = ({
     label,

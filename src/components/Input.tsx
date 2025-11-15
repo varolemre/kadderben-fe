@@ -5,10 +5,15 @@ import {
     StyleSheet,
     TouchableOpacity,
     FlatList,
+    Platform,
 } from 'react-native';
 import Text from './Text';
 import TextInput from './TextInput';
 import { COLORS } from '../utils/constants';
+
+// Clipboard API - React Native'de deprecated ama hala çalışıyor
+// @ts-ignore - Clipboard deprecated API
+import { Clipboard } from 'react-native';
 
 const COMMON_EMAIL_DOMAINS = [
     'gmail.com',
@@ -32,6 +37,7 @@ const Input = ({
                    style,
                    showPasswordToggle = false,
                    enableEmailSuggestions = false,
+                   showPasteButton = false,
                }) => {
     const [isSecure, setIsSecure] = useState(secureTextEntry);
     const [suggestions, setSuggestions] = useState([]);
@@ -72,6 +78,17 @@ const Input = ({
         setShowSuggestions(false);
     };
 
+    const handlePaste = async () => {
+        try {
+            const content = await Clipboard.getString();
+            if (content) {
+                onChangeText(content.trim());
+            }
+        } catch (error) {
+            console.error('Paste error:', error);
+        }
+    };
+
     return (
         <View style={[styles.container, style]}>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -93,6 +110,14 @@ const Input = ({
                     editable={editable}
                     autoCorrect={false}
                 />
+
+                {showPasteButton && (
+                    <TouchableOpacity
+                        style={styles.pasteButton}
+                        onPress={handlePaste}>
+                        <Text style={styles.pasteText}>📋</Text>
+                    </TouchableOpacity>
+                )}
 
                 {showPasswordToggle && secureTextEntry && (
                     <TouchableOpacity
@@ -156,6 +181,17 @@ const styles = StyleSheet.create({
     inputDisabled: {
         backgroundColor: '#F2F2F7',
         color: '#999',
+    },
+    pasteButton: {
+        position: 'absolute',
+        right: 16,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        paddingHorizontal: 8,
+    },
+    pasteText: {
+        fontSize: 20,
     },
     eyeButton: {
         position: 'absolute',

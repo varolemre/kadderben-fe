@@ -23,14 +23,21 @@ const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     const { isAuthenticated, isLoading, initAuth, shouldShowOnboarding } = useAuthStore();
+    const [isInitialized, setIsInitialized] = React.useState(false);
 
     // Initialize auth on app start
     useEffect(() => {
-        initAuth();
-    }, [initAuth]);
+        const initialize = async () => {
+            await initAuth();
+            setIsInitialized(true);
+        };
+        if (!isInitialized) {
+            initialize();
+        }
+    }, [initAuth, isInitialized]);
 
-    // Show loading while checking auth state
-    if (isLoading) {
+    // Show loading only on initial load, not during login attempts
+    if (!isInitialized) {
         return <Loading text="Loading..." />;
     }
 

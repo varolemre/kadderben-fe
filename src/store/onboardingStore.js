@@ -11,6 +11,7 @@ const useOnboardingStore = create((set, get) => ({
         occupation: null,
         relationshipStatus: null,
         notificationsEnabled: true,
+        referralCode: null,
     },
 
     // Update form field
@@ -35,6 +36,7 @@ const useOnboardingStore = create((set, get) => ({
                 occupation: null,
                 relationshipStatus: null,
                 notificationsEnabled: true,
+                referralCode: null,
             },
         });
     },

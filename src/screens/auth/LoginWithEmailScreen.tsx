@@ -46,9 +46,14 @@ const LoginWithEmailScreen = ({ navigation }) => {
         const result = await login(email.trim(), password);
 
         if (!result.success) {
-            Alert.alert('Giriş Başarısız', result.error || 'Bir hata oluştu');
+            // Show error alert but stay on the same screen
+            Alert.alert('Giriş Başarısız', result.error || 'Bir hata oluştu', [
+                { text: 'Tamam', style: 'default' }
+            ]);
+            // Don't navigate anywhere - user stays on LoginWithEmailScreen
+            return;
         }
-        // If success, navigation will be handled automatically by App.js
+        // If success, navigation will be handled automatically by AppNavigator
     };
 
     return (

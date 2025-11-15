@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Switch, Text } from '../../components';
+import { Button, Switch, Text, Input } from '../../components';
 import useOnboardingStore from '../../store/onboardingStore';
 import useAuthStore from '../../store/authStore';
 import * as onboardingApi from '../../api/onboardingApi';
@@ -34,6 +34,7 @@ const OnboardingStep4 = ({ navigation }) => {
                 occupation: formData.occupation || null,
                 relationshipStatus: formData.relationshipStatus || null,
                 notificationsEnabled: formData.notificationsEnabled,
+                referralCode: formData.referralCode || null,
             };
 
             const response = await onboardingApi.saveOnboarding(onboardingData);
@@ -85,6 +86,14 @@ const OnboardingStep4 = ({ navigation }) => {
                     </View>
 
                     <View style={styles.content}>
+                        <Input
+                            label="Referans Kodu (Opsiyonel)"
+                            value={formData.referralCode || ''}
+                            onChangeText={(text) => updateField('referralCode', text)}
+                            placeholder="Referans kodunuzu girin"
+                            showPasteButton
+                            style={styles.referralInput}
+                        />
                         <View style={styles.switchContainer}>
                             <Switch
                                 label="Bildirimleri Etkinleştir"
@@ -147,6 +156,9 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
+    },
+    referralInput: {
+        marginBottom: 16,
     },
     switchContainer: {
         backgroundColor: '#F9F9F9',

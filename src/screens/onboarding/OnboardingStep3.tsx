@@ -187,13 +187,12 @@ const OnboardingStep3 = ({ navigation }) => {
                                     <TouchableOpacity
                                         style={styles.dateTimeButton}
                                         onPress={() => setShowTimePicker(true)}>
-                                        <View style={styles.dateTimeTextContainer}>
-                                            <Text 
-                                                style={[styles.dateTimeText, !formData.birthTime && styles.placeholder]}
-                                                numberOfLines={1}>
-                                                {formData.birthTime || 'Saat seçin'}
-                                            </Text>
-                                        </View>
+                                        <Text 
+                                            style={[styles.dateTimeText, !formData.birthTime && styles.placeholder]}
+                                            numberOfLines={1}
+                                            ellipsizeMode="tail">
+                                            {formData.birthTime || 'Saat seçin'}
+                                        </Text>
                                         <Text style={styles.arrow}>🕐</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -386,27 +385,26 @@ const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#E5E5EA',
         borderRadius: 12,
-        paddingHorizontal: 16,
+        paddingLeft: 16,
+        paddingRight: 40,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         backgroundColor: '#FFFFFF',
-    },
-    dateTimeTextContainer: {
-        flex: 1,
-        marginRight: 8,
-        minWidth: 0, // Allow container to shrink
+        position: 'relative',
     },
     dateTimeText: {
         fontSize: 16,
         color: '#000',
+        flex: 1,
+        marginRight: 8,
     },
     placeholder: {
         color: '#999',
     },
     arrow: {
         fontSize: 20,
-        width: 24, // Fixed width for arrow
+        position: 'absolute',
+        right: 16,
     },
     timeOptionsContainer: {
         flexDirection: 'row',

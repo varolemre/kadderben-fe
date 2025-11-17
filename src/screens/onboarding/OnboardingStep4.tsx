@@ -18,7 +18,7 @@ import { COLORS } from '../../utils/constants';
 
 const OnboardingStep4 = ({ navigation }) => {
     const { formData, updateField, resetForm } = useOnboardingStore();
-    const { completeOnboarding, updateUser } = useAuthStore();
+    const { updateUser } = useAuthStore();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleComplete = async () => {
@@ -44,11 +44,12 @@ const OnboardingStep4 = ({ navigation }) => {
                 await updateUser(response.data.user);
             }
 
-            // Complete onboarding
-            completeOnboarding();
+            // Don't call completeOnboarding() here - let TransitionScreen handle it
+            // This keeps shouldShowOnboarding true so TransitionScreen stays in onboarding stack
             resetForm();
 
-            // Navigation will be handled automatically by AppNavigator
+            // Navigate to transition screen
+            navigation.replace('Transition');
         } catch (error) {
             console.error('Onboarding save error:', error);
             Alert.alert(

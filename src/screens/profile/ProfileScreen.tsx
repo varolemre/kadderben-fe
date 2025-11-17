@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Button } from '../../components';
 import useAuthStore from '../../store/authStore';
@@ -8,6 +8,23 @@ import { COLORS } from '../../utils/constants';
 
 const ProfileScreen = () => {
     const { user, logout } = useAuthStore();
+
+    const handleLogout = async () => {
+        Alert.alert(
+            'Çıkış Yap',
+            'Çıkış yapmak istediğinize emin misiniz?',
+            [
+                { text: 'İptal', style: 'cancel' },
+                {
+                    text: 'Çıkış Yap',
+                    style: 'destructive',
+                    onPress: async () => {
+                        await logout();
+                    },
+                },
+            ]
+        );
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -21,7 +38,7 @@ const ProfileScreen = () => {
                 )}
                 <Button
                     title="Çıkış Yap"
-                    onPress={logout}
+                    onPress={handleLogout}
                     style={[styles.logoutButton, { backgroundColor: COLORS.MAIN }]}
                 />
             </View>

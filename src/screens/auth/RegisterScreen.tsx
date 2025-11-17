@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     View,
     StyleSheet,
@@ -8,6 +8,8 @@ import {
     ScrollView,
     TouchableOpacity,
     Alert,
+    Animated,
+    Easing,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Input, Text } from '../../components';
@@ -22,8 +24,28 @@ const RegisterScreen = ({ navigation }) => {
         fullName: '',
     });
     const [errors, setErrors] = useState({});
+    const screenFade = useRef(new Animated.Value(0)).current;
+    const contentSlide = useRef(new Animated.Value(20)).current;
 
     const { register, isLoading } = useAuthStore();
+
+    useEffect(() => {
+        // Smooth fade-in and slide-up animation
+        Animated.parallel([
+            Animated.timing(screenFade, {
+                toValue: 1,
+                duration: 400,
+                easing: Easing.out(Easing.ease),
+                useNativeDriver: true,
+            }),
+            Animated.timing(contentSlide, {
+                toValue: 0,
+                duration: 400,
+                easing: Easing.out(Easing.ease),
+                useNativeDriver: true,
+            }),
+        ]).start();
+    }, []);
 
     const updateField = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -77,88 +99,106 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.keyboardView}>
-                <ScrollView
-                    contentContainerStyle={styles.scrollContent}
-                    keyboardShouldPersistTaps="handled">
+        <Animated.View style={[styles.wrapper, { opacity: screenFade }]}>
+            <SafeAreaView style={styles.container}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.keyboardView}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+                    <ScrollView
+                        contentContainerStyle={styles.scrollContent}
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={false}
+                        bounces={false}>
 
-                    <TouchableOpacity 
-                        style={styles.backButton}
-                        onPress={() => navigation.goBack()}>
-                        <Text style={styles.backButtonText}>←</Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.header}>
-                        <Text style={styles.title}>Create Account</Text>
-                        <Text style={styles.subtitle}>Sign up to get started</Text>
-                    </View>
-
-                    <View style={styles.form}>
-                        <Input
-                            label="Full Name"
-                            value={formData.fullName}
-                            onChangeText={text => updateField('fullName', text)}
-                            placeholder="Enter your full name"
-                            autoCapitalize="words"
-                            error={errors.fullName}
-                        />
-
-                        <Input
-                            label="Email"
-                            value={formData.email}
-                            onChangeText={text => updateField('email', text)}
-                            placeholder="Enter your email"
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            error={errors.email}
-                            enableEmailSuggestions
-                        />
-
-                        <Input
-                            label="Password"
-                            value={formData.password}
-                            onChangeText={text => updateField('password', text)}
-                            placeholder="Create a password"
-                            secureTextEntry
-                            showPasswordToggle
-                            error={errors.password}
-                        />
-
-                        <Input
-                            label="Confirm Password"
-                            value={formData.confirmPassword}
-                            onChangeText={text => updateField('confirmPassword', text)}
-                            placeholder="Confirm your password"
-                            secureTextEntry
-                            showPasswordToggle
-                            error={errors.confirmPassword}
-                        />
-
-                        <Button
-                            title="Sign Up"
-                            onPress={handleRegister}
-                            loading={isLoading}
-                            style={[styles.registerButton, { backgroundColor: COLORS.MAIN }]}
-                        />
-
-                        <View style={styles.footer}>
-                            <Text style={styles.footerText}>Already have an account? </Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                                <Text style={styles.linkText}>Sign In</Text>
+                        <Animated.View 
+                            style={[
+                                styles.animatedContent,
+                                {
+                                    opacity: screenFade,
+                                    transform: [{ translateY: contentSlide }],
+                                },
+                            ]}>
+                            <TouchableOpacity 
+                                style={styles.backButton}
+                                onPress={() => navigation.goBack()}>
+                                <Text style={styles.backButtonText}>←</Text>
                             </TouchableOpacity>
-                        </View>
-                    </View>
 
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                            <View style={styles.header}>
+                                <Text style={styles.title}>Create Account</Text>
+                                <Text style={styles.subtitle}>Sign up to get started</Text>
+                            </View>
+
+                            <View style={styles.form}>
+                                <Input
+                                    label="Full Name"
+                                    value={formData.fullName}
+                                    onChangeText={text => updateField('fullName', text)}
+                                    placeholder="Enter your full name"
+                                    autoCapitalize="words"
+                                    error={errors.fullName}
+                                />
+
+                                <Input
+                                    label="Email"
+                                    value={formData.email}
+                                    onChangeText={text => updateField('email', text)}
+                                    placeholder="Enter your email"
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    error={errors.email}
+                                    enableEmailSuggestions
+                                />
+
+                                <Input
+                                    label="Password"
+                                    value={formData.password}
+                                    onChangeText={text => updateField('password', text)}
+                                    placeholder="Create a password"
+                                    secureTextEntry
+                                    showPasswordToggle
+                                    error={errors.password}
+                                />
+
+                                <Input
+                                    label="Confirm Password"
+                                    value={formData.confirmPassword}
+                                    onChangeText={text => updateField('confirmPassword', text)}
+                                    placeholder="Confirm your password"
+                                    secureTextEntry
+                                    showPasswordToggle
+                                    error={errors.confirmPassword}
+                                />
+
+                                <Button
+                                    title="Sign Up"
+                                    onPress={handleRegister}
+                                    loading={isLoading}
+                                    style={[styles.registerButton, { backgroundColor: COLORS.MAIN }]}
+                                />
+
+                                <View style={styles.footer}>
+                                    <Text style={styles.footerText}>Already have an account? </Text>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                                        <Text style={styles.linkText}>Sign In</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Animated.View>
+
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        </Animated.View>
     );
 };
 
 const styles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+        backgroundColor: COLORS.BACKGROUND,
+    },
     container: {
         flex: 1,
         backgroundColor: COLORS.BACKGROUND,
@@ -169,6 +209,10 @@ const styles = StyleSheet.create({
     scrollContent: {
         flexGrow: 1,
         padding: 24,
+        paddingBottom: 100,
+    },
+    animatedContent: {
+        flex: 1,
     },
     header: {
         marginTop: 40,
@@ -185,7 +229,7 @@ const styles = StyleSheet.create({
         color: COLORS.SECOND,
     },
     form: {
-        marginBottom: 32,
+        marginBottom: 40,
     },
     registerButton: {
         marginTop: 8,

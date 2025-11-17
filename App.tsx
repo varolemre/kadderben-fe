@@ -1,14 +1,22 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, View, StyleSheet } from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
+import { COLORS } from './src/utils/constants';
 
 const App = (): React.JSX.Element => {
     return (
-        <>
-            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={COLORS.BACKGROUND} translucent={false} />
             <AppNavigator />
-        </>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: COLORS.BACKGROUND,
+    },
+});
 
 export default App;

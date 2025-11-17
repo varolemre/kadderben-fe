@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
     GOOGLE_LOGIN: '/auth/google',
     APPLE_LOGIN: '/auth/apple',
     ONBOARDING: '/onboarding',
+    STORIES: '/stories',
 };
 
 // App Colors
@@ -41,3 +42,12 @@ export const COLORS = {
 export const FONTS = {
     REGULAR: 'RedHatDisplay-Regular',
 };
+
+// Transition Screen Messages
+export const TRANSITION_MESSAGES = [
+    'Hazırsan başlıyoruz...',
+    'Yıldız haritan çıkarılıyor...',
+    'Enerjin analiz ediliyor...',
+    'Bugünün rehberi hazırlanıyor...',
+    'Her şey hazır! ✨',
+];

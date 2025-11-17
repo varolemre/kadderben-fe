@@ -189,9 +189,10 @@ const OnboardingStep3 = ({ navigation }) => {
                                         onPress={() => setShowTimePicker(true)}>
                                         <Text 
                                             style={[styles.dateTimeText, !formData.birthTime && styles.placeholder]}
-                                            numberOfLines={1}
-                                            ellipsizeMode="tail">
-                                            {formData.birthTime || 'Saat seçin'}
+                                            numberOfLines={1}>
+                                            {formData.birthTime 
+                                                ? `${String(selectedTime.getHours()).padStart(2, '0')}:${String(selectedTime.getMinutes()).padStart(2, '0')}`
+                                                : 'Saat seçin'}
                                         </Text>
                                         <Text style={styles.arrow}>🕐</Text>
                                     </TouchableOpacity>
@@ -385,26 +386,21 @@ const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#E5E5EA',
         borderRadius: 12,
-        paddingLeft: 16,
-        paddingRight: 40,
+        paddingHorizontal: 2,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
-        position: 'relative',
     },
     dateTimeText: {
         fontSize: 16,
         color: '#000',
-        flex: 1,
-        marginRight: 8,
     },
     placeholder: {
         color: '#999',
     },
     arrow: {
         fontSize: 20,
-        position: 'absolute',
-        right: 16,
+        marginLeft: 12,
     },
     timeOptionsContainer: {
         flexDirection: 'row',

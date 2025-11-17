@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     reactNativeFactory = factory
 
     window = UIWindow(frame: UIScreen.main.bounds)
+    // Set background color to match splash screen to prevent black flash
+    window?.backgroundColor = UIColor(red: 0.5725490196078431, green: 0.2823529411764706, blue: 0.47843137254901963, alpha: 1.0)
 
     factory.startReactNative(
       withModuleName: "GenericMobileFE",

@@ -63,7 +63,8 @@ const LoginWithEmailScreen = ({ navigation }) => {
                 style={styles.keyboardView}>
                 <ScrollView
                     contentContainerStyle={styles.scrollContent}
-                    keyboardShouldPersistTaps="handled">
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}>
 
                     <TouchableOpacity 
                         style={styles.backButton}
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
     scrollContent: {
         flexGrow: 1,
         padding: 24,
+        paddingBottom: 100,
     },
     header: {
         marginTop: 40,
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
         color: COLORS.SECOND,
     },
     form: {
-        marginBottom: 32,
+        marginBottom: 40,
     },
     loginButton: {
         marginTop: 8,

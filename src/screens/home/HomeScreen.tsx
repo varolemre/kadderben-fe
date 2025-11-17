@@ -3,68 +3,90 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Alert,
+    Image,
+    ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Text } from '../../components';
+import { Text, FortuneCard } from '../../components';
+import StorySection from '../../components/StorySection';
 import useAuthStore from '../../store/authStore';
 import { COLORS } from '../../utils/constants';
 
-const HomeScreen = () => {
-    const { user, logout } = useAuthStore();
+const carkFaliImage = require('../../assets/img/carkfali.png');
+const kahveFaliImage = require('../../assets/img/kahvefali.png');
+const kurabiyeImage = require('../../assets/img/kurabiye.png');
+const tarotImage = require('../../assets/img/tarot.png');
 
-    const handleLogout = async () => {
-        Alert.alert(
-            'Logout',
-            'Are you sure you want to logout?',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Logout',
-                    style: 'destructive',
-                    onPress: async () => {
-                        await logout();
-                    },
-                },
-            ]
-        );
+const HomeScreen = () => {
+    const { user } = useAuthStore();
+
+    const handleFortuneCardPress = (type: string) => {
+        // TODO: Navigate to fortune screen based on type
+        console.log(`${type} card pressed`);
     };
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Welcome! 👋</Text>
-                    <Text style={styles.subtitle}>{user?.fullName || 'User'}</Text>
-                    <Text style={styles.email}>{user?.email}</Text>
-                </View>
-
-                <View style={styles.infoCard}>
-                    <Text style={styles.cardTitle}>Account Info</Text>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Provider:</Text>
-                        <Text style={styles.infoValue}>{user?.provider || 'EMAIL'}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Role:</Text>
-                        <Text style={styles.infoValue}>{user?.role || 'USER'}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Email Verified:</Text>
-                        <Text style={styles.infoValue}>
-                            {user?.emailVerified ? '✅ Yes' : '❌ No'}
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={styles.footer}>
-                    <Button
-                        title="Logout"
-                        onPress={handleLogout}
-                        variant="outline"
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.content}
+                showsVerticalScrollIndicator={false}>
+                {/* Header with Logo and Jeton */}
+                <View style={styles.topHeader}>
+                    <Image
+                        source={require('../../assets/img/kadderballogo.png')}
+                        style={styles.logo}
+                        resizeMode="contain"
                     />
+                    <View style={styles.jetonContainer}>
+                        <View style={styles.jetonBadge}>
+                            <Text style={styles.jetonIcon}>⭐</Text>
+                            <Text style={styles.jetonText}>{user?.jeton || 0}</Text>
+                        </View>
+                    </View>
                 </View>
-            </View>
+
+                {/* Story Section */}
+                <StorySection />
+
+                {/* Fortune Cards */}
+                <FortuneCard
+                    imageSource={carkFaliImage}
+                    title="Çark Falı"
+                    subtitle="Çarkınızı çevirmeye hazır mısınız?"
+                    onPress={() => handleFortuneCardPress('Çark Falı')}
+                />
+                <FortuneCard
+                    imageSource={kahveFaliImage}
+                    title="Kahve Falı"
+                    subtitle="Kahve telvenizdeki sırları keşfedin"
+                    onPress={() => handleFortuneCardPress('Kahve Falı')}
+                />
+
+                {/* Side by Side Fortune Cards */}
+                <View style={styles.rowContainer}>
+                    <View style={styles.halfCard}>
+                        <FortuneCard
+                            imageSource={kurabiyeImage}
+                            title="Şanslı Kurabiye"
+                            subtitle="Mesajınızı okuyun"
+                            onPress={() => handleFortuneCardPress('Şanslı Kurabiye')}
+                            style={styles.sideBySideCard}
+                            compact={true}
+                        />
+                    </View>
+                    <View style={styles.halfCard}>
+                        <FortuneCard
+                            imageSource={tarotImage}
+                            title="Tarot"
+                            subtitle="Kartlarınızın sırrını keşfedin"
+                            onPress={() => handleFortuneCardPress('Tarot')}
+                            style={styles.sideBySideCard}
+                            compact={true}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -74,62 +96,62 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.BACKGROUND,
     },
-    content: {
+    scrollView: {
         flex: 1,
+    },
+    content: {
         padding: 24,
+        paddingBottom: 40,
     },
-    header: {
-        backgroundColor: '#FFFFFF',
-        padding: 24,
-        borderRadius: 16,
-        marginBottom: 24,
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: COLORS.SECOND,
-        marginBottom: 8,
-    },
-    subtitle: {
-        fontSize: 20,
-        color: COLORS.SECOND,
-        marginBottom: 4,
-    },
-    email: {
-        fontSize: 14,
-        color: COLORS.SECOND,
-    },
-    infoCard: {
-        backgroundColor: '#FFFFFF',
-        padding: 24,
-        borderRadius: 16,
-        marginBottom: 24,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#000',
-        marginBottom: 16,
-    },
-    infoRow: {
+    topHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F2F2F7',
+        alignItems: 'center',
+        marginTop: -10,
+        marginBottom: 16,
     },
-    infoLabel: {
-        fontSize: 16,
-        color: '#666',
+    logo: {
+        width: 120,
+        height: 40,
     },
-    infoValue: {
+    jetonContainer: {
+        alignItems: 'flex-end',
+    },
+    jetonBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.MAIN,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 16,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,
+    },
+    jetonIcon: {
         fontSize: 16,
+        marginRight: 6,
+    },
+    jetonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
         color: '#000',
-        fontWeight: '600',
     },
-    footer: {
-        marginTop: 'auto',
+    rowContainer: {
+        flexDirection: 'row',
+        marginBottom: 16,
+        gap: 12,
+    },
+    halfCard: {
+        flex: 1,
+    },
+    sideBySideCard: {
+        marginBottom: 0,
     },
 });
 

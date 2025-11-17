@@ -17,12 +17,16 @@ const kahveFaliImage = require('../../assets/img/kahvefali.png');
 const kurabiyeImage = require('../../assets/img/kurabiye.png');
 const tarotImage = require('../../assets/img/tarot.png');
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
     const { user } = useAuthStore();
 
     const handleFortuneCardPress = (type: string) => {
-        // TODO: Navigate to fortune screen based on type
-        console.log(`${type} card pressed`);
+        if (type === 'Çark Falı') {
+            navigation.navigate('Wheel');
+        } else {
+            // TODO: Navigate to other fortune screens
+            console.log(`${type} card pressed`);
+        }
     };
 
     return (
@@ -101,13 +105,16 @@ const styles = StyleSheet.create({
     },
     content: {
         padding: 24,
-        paddingBottom: 40,
+        paddingBottom: 32,
+        maxWidth: 430,
+        alignSelf: 'center',
+        width: '100%',
     },
     topHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: -10,
+        marginTop: 0,
         marginBottom: 16,
     },
     logo: {
@@ -122,20 +129,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.MAIN,
         paddingHorizontal: 12,
-        paddingVertical: 6,
+        paddingVertical: 8,
         borderRadius: 16,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        shadowOpacity: 0.12,
+        shadowRadius: 4,
         elevation: 3,
     },
     jetonIcon: {
         fontSize: 16,
-        marginRight: 6,
+        marginRight: 8,
     },
     jetonText: {
         fontSize: 16,

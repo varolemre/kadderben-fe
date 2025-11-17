@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
             height: 2,
         },
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowRadius: 8,
+        elevation: 2,
     },
     imageContainer: {
         width: 80,
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: '#27192c', // Match card background to hide transparent areas
         marginRight: 16,
+        flexShrink: 0,
     },
     image: {
         width: '100%',
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: COLORS.SECOND,
         lineHeight: 20,
+        opacity: 0.9,
     },
     arrowContainer: {
         width: 32,
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 8,
+        flexShrink: 0,
     },
     arrow: {
         fontSize: 24,
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
         padding: 12,
         flexDirection: 'column',
         alignItems: 'center',
+        marginBottom: 0,
     },
     compactImageContainer: {
         width: 60,
@@ -115,12 +119,13 @@ const styles = StyleSheet.create({
     compactTitle: {
         fontSize: 16,
         textAlign: 'center',
-        marginBottom: 2,
+        marginBottom: 4,
     },
     compactSubtitle: {
         fontSize: 12,
         textAlign: 'center',
         lineHeight: 16,
+        opacity: 0.9,
     },
 });
 

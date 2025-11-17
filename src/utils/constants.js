@@ -29,6 +29,8 @@ export const API_ENDPOINTS = {
     APPLE_LOGIN: '/auth/apple',
     ONBOARDING: '/onboarding',
     STORIES: '/stories',
+    WHEEL_STATUS: '/fortune/wheel/status',
+    WHEEL_SPIN: '/fortune/wheel/spin',
 };
 
 // App Colors

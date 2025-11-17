@@ -6,7 +6,7 @@ import { Text } from '../components';
 import { COLORS } from '../utils/constants';
 
 // Screens
-import HomeScreen from '../screens/home/HomeScreen';
+import HomeStackNavigator from './HomeStackNavigator';
 import HoroscopeScreen from '../screens/horoscope/HoroscopeScreen';
 import RitualScreen from '../screens/ritual/RitualScreen';
 import BlogScreen from '../screens/blog/BlogScreen';
@@ -26,7 +26,7 @@ const TabNavigator = () => {
             }}>
             <Tab.Screen
                 name="Home"
-                component={HomeScreen}
+                component={HomeStackNavigator}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
                         <Text style={[styles.icon, { color }]}>🏠</Text>

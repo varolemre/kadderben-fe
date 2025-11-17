@@ -99,7 +99,7 @@ const StorySection = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 20,
+        marginBottom: 24,
     },
     scrollContent: {
         paddingLeft: 0,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         borderRadius: 32,
     },
     loadingContainer: {
-        padding: 20,
+        padding: 24,
         alignItems: 'center',
     },
 });

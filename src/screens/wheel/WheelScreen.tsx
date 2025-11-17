@@ -17,6 +17,8 @@ import { COLORS } from '../../utils/constants';
 import * as fortuneWheelApi from '../../api/fortuneWheelApi';
 import { FalCategory, CATEGORY_LABELS, WheelStatusResponse, SpinWheelResponse } from '../../types/fortuneWheel';
 
+const wheelImage = require('../../assets/img/wheel.png');
+
 const WheelScreen = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState<FalCategory>(FalCategory.GENEL);
     const [status, setStatus] = useState<WheelStatusResponse | null>(null);
@@ -210,30 +212,16 @@ const WheelScreen = ({ navigation }) => {
                     <View style={styles.pointerContainer}>
                         <View style={styles.pointer} />
                     </View>
-                    <Animated.View
+                    <Animated.Image
+                        source={wheelImage}
                         style={[
-                            styles.wheel,
+                            styles.wheelImage,
                             {
                                 transform: [{ rotate: spinRotation }],
                             },
-                        ]}>
-                        {/* Wheel segments - simple visual representation */}
-                        {[...Array(8)].map((_, i) => (
-                            <View
-                                key={i}
-                                style={[
-                                    styles.wheelSegment,
-                                    i % 2 === 0 && styles.wheelSegmentEven,
-                                    {
-                                        transform: [{ rotate: `${i * 45}deg` }],
-                                    },
-                                ]}
-                            />
-                        ))}
-                        <View style={styles.wheelCenter}>
-                            <Text style={styles.wheelCenterText}>✨</Text>
-                        </View>
-                    </Animated.View>
+                        ]}
+                        resizeMode="contain"
+                    />
                 </View>
 
                 {/* Spin Button */}
@@ -462,15 +450,10 @@ const styles = StyleSheet.create({
         borderRightColor: 'transparent',
         borderBottomColor: COLORS.MAIN,
     },
-    wheel: {
+    wheelImage: {
         width: 280,
         height: 280,
-        borderRadius: 140,
-        backgroundColor: '#27192c',
-        borderWidth: 4,
-        borderColor: COLORS.MAIN,
-        position: 'relative',
-        overflow: 'hidden',
+        alignSelf: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -479,34 +462,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.15,
         shadowRadius: 12,
         elevation: 8,
-    },
-    wheelSegment: {
-        position: 'absolute',
-        width: '50%',
-        height: '50%',
-        top: 0,
-        left: '50%',
-        borderRightWidth: 2,
-        borderRightColor: 'rgba(224, 195, 108, 0.3)',
-    },
-    wheelSegmentEven: {
-        backgroundColor: 'rgba(224, 195, 108, 0.05)',
-    },
-    wheelCenter: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: [{ translateX: -30 }, { translateY: -30 }],
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: COLORS.MAIN,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1,
-    },
-    wheelCenterText: {
-        fontSize: 24,
     },
     buttonContainer: {
         alignItems: 'center',

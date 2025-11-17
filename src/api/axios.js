@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '../utils/constants';
 import { getTokens, saveTokens, deleteTokens } from '../utils/storage';
+import useAuthStore from '../store/authStore';
 
 // Create axios instance
 const api = axios.create({
@@ -54,8 +55,11 @@ api.interceptors.response.use(
             originalRequest.url?.includes('/auth/register') ||
             originalRequest.url?.includes('/auth/refresh');
 
-        // If error is not 401 or request already retried or auth endpoint, reject
-        if (error.response?.status !== 401 || originalRequest._retry || isAuthEndpoint) {
+        // Handle 401 and 403 errors (both indicate authentication issues)
+        const isAuthError = error.response?.status === 401 || error.response?.status === 403;
+        
+        // If not auth error, request already retried, or auth endpoint, reject
+        if (!isAuthError || originalRequest._retry || isAuthEndpoint) {
             return Promise.reject(error);
         }
 
@@ -69,6 +73,9 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 })
                 .catch(err => {
+                    // If refresh failed, logout user
+                    const { logout } = useAuthStore.getState();
+                    logout();
                     return Promise.reject(err);
                 });
         }
@@ -80,7 +87,11 @@ api.interceptors.response.use(
             const tokens = await getTokens();
 
             if (!tokens?.refreshToken) {
-                throw new Error('No refresh token available');
+                // No refresh token available, logout user
+                await deleteTokens();
+                const { logout } = useAuthStore.getState();
+                await logout();
+                return Promise.reject(new Error('No refresh token available'));
             }
 
             // Call refresh token endpoint
@@ -109,11 +120,12 @@ api.interceptors.response.use(
             processQueue(refreshError, null);
             isRefreshing = false;
 
-            // Clear tokens and redirect to login
+            // Clear tokens and logout user
             await deleteTokens();
-
-            // You can emit an event here to redirect to login screen
-            // Example: EventEmitter.emit('LOGOUT');
+            
+            // Logout from auth store to update app state
+            const { logout } = useAuthStore.getState();
+            await logout();
 
             return Promise.reject(refreshError);
         }

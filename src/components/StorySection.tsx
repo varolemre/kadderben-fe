@@ -11,6 +11,7 @@ import {
 import { Text } from './Text';
 import { COLORS } from '../utils/constants';
 import * as storyApi from '../api/storyApi';
+import StoryViewer from './StoryViewer';
 
 interface Story {
     id: number;
@@ -40,6 +41,8 @@ const StoryItem = ({ story, onPress, isFirst }) => {
 const StorySection = () => {
     const [stories, setStories] = useState<Story[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedStory, setSelectedStory] = useState<Story | null>(null);
+    const [viewerVisible, setViewerVisible] = useState(false);
 
     useEffect(() => {
         loadStories();
@@ -60,8 +63,13 @@ const StorySection = () => {
     };
 
     const handleStoryPress = (story: Story) => {
-        // TODO: Open story viewer modal
-        console.log('Story pressed:', story.id);
+        setSelectedStory(story);
+        setViewerVisible(true);
+    };
+
+    const handleCloseViewer = () => {
+        setViewerVisible(false);
+        setSelectedStory(null);
     };
 
     if (loading) {
@@ -79,21 +87,28 @@ const StorySection = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.scrollContent}>
-                {stories.map((story, index) => (
-                    <StoryItem
-                        key={story.id}
-                        story={story}
-                        onPress={() => handleStoryPress(story)}
-                        isFirst={index === 0}
-                    />
-                ))}
-            </ScrollView>
-        </View>
+        <>
+            <View style={styles.container}>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.scrollContent}>
+                    {stories.map((story, index) => (
+                        <StoryItem
+                            key={story.id}
+                            story={story}
+                            onPress={() => handleStoryPress(story)}
+                            isFirst={index === 0}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
+            <StoryViewer
+                visible={viewerVisible}
+                story={selectedStory}
+                onClose={handleCloseViewer}
+            />
+        </>
     );
 };
 

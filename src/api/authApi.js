@@ -84,3 +84,15 @@ export const appleLogin = async (idToken, user) => {
         throw error.response?.data || error;
     }
 };
+
+/**
+ * Get current user info
+ */
+export const getUserInfo = async () => {
+    try {
+        const response = await api.get(API_ENDPOINTS.USER_INFO);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error;
+    }
+};

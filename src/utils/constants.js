@@ -27,10 +27,22 @@ export const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',
     GOOGLE_LOGIN: '/auth/google',
     APPLE_LOGIN: '/auth/apple',
+    USER_INFO: '/user/info',
     ONBOARDING: '/onboarding',
     STORIES: '/stories',
     WHEEL_STATUS: '/fortune/wheel/status',
     WHEEL_SPIN: '/fortune/wheel/spin',
+    COFFEE_FORTUNE: '/coffee-fortune',
+    TAROT_READERS: '/tarot/readers',
+    TAROT_READINGS: '/tarot/readings',
+    NOTIFICATIONS: '/notifications',
+    COOKIE_OPEN: '/cookie/open',
+    NOTIFICATION_MARK_READ: '/notifications',
+    DAILY_HOROSCOPE: '/horoscope/daily',
+    PROFILE_UPDATE: '/user/profile',
+    PROFILE_GET: '/user/profile',
+    DELETE_ACCOUNT: '/user/account',
+    MY_ZODIAC: '/zodiac/my-zodiac',
 };
 
 // App Colors

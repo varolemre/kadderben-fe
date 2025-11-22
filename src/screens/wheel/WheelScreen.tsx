@@ -19,6 +19,16 @@ import { FalCategory, CATEGORY_LABELS, WheelStatusResponse, SpinWheelResponse } 
 
 const wheelImage = require('../../assets/img/wheel.png');
 
+// Category-based theme colors
+const CATEGORY_THEMES: Record<FalCategory, { primary: string; glow: string }> = {
+    ASK: { primary: '#FF4B87', glow: 'rgba(255, 75, 135, 0.35)' }, // pink / love
+    KARIYER: { primary: '#4C8DFF', glow: 'rgba(76, 141, 255, 0.35)' }, // blue / career
+    PARA: { primary: '#E0C36C', glow: 'rgba(224, 195, 108, 0.35)' }, // gold / money
+    SAGLIK: { primary: '#4BD2A0', glow: 'rgba(75, 210, 160, 0.35)' }, // green / health
+    AILE: { primary: '#FF9F43', glow: 'rgba(255, 159, 67, 0.35)' }, // warm orange / family
+    GENEL: { primary: COLORS.MAIN, glow: 'rgba(180, 120, 255, 0.35)' }, // default / generic
+};
+
 const WheelScreen = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState<FalCategory>(FalCategory.GENEL);
     const [status, setStatus] = useState<WheelStatusResponse | null>(null);
@@ -29,10 +39,73 @@ const WheelScreen = ({ navigation }) => {
     const [showResult, setShowResult] = useState(false);
 
     const spinAnimation = useRef(new Animated.Value(0)).current;
+    const spinButtonScale = useRef(new Animated.Value(1)).current;
+    const spinButtonAnimationRef = useRef<Animated.CompositeAnimation | null>(null);
+
+    // Get current theme based on selected category
+    const theme = CATEGORY_THEMES[selectedCategory];
 
     useEffect(() => {
         loadStatus();
     }, []);
+
+    // Start/stop spin button animation based on canSpin and spinning state
+    useEffect(() => {
+        if (!status) return;
+
+        const shouldAnimate = canSpin() && !spinning;
+
+        if (shouldAnimate) {
+            startSpinButtonAnimation();
+        } else {
+            stopSpinButtonAnimation();
+        }
+
+        return () => {
+            stopSpinButtonAnimation();
+        };
+    }, [status, spinning, selectedCategory]);
+
+    const startSpinButtonAnimation = () => {
+        // Stop any existing animation
+        if (spinButtonAnimationRef.current) {
+            spinButtonAnimationRef.current.stop();
+        }
+
+        // Reset values
+        spinButtonScale.setValue(1);
+
+        // Start loop animation - only scale, no shake
+        spinButtonAnimationRef.current = Animated.loop(
+            Animated.sequence([
+                Animated.timing(spinButtonScale, {
+                    toValue: 1.02,
+                    duration: 800,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(spinButtonScale, {
+                    toValue: 1.0,
+                    duration: 800,
+                    useNativeDriver: true,
+                }),
+            ])
+        );
+
+        spinButtonAnimationRef.current.start();
+    };
+
+    const stopSpinButtonAnimation = () => {
+        if (spinButtonAnimationRef.current) {
+            spinButtonAnimationRef.current.stop();
+            spinButtonAnimationRef.current = null;
+        }
+        // Reset to default value
+        Animated.timing(spinButtonScale, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    };
 
     const loadStatus = async () => {
         try {
@@ -186,7 +259,9 @@ const WheelScreen = ({ navigation }) => {
                             <Text style={styles.statusValue}>{status.currentJetons}</Text>
                         </View>
                         {status.canSpinForFree && (
-                            <Text style={styles.freeSpinText}>✨ Ücretsiz çevirme hakkınız var!</Text>
+                            <Text style={[styles.freeSpinText, { color: theme.primary }]}>
+                                ✨ Ücretsiz çevirme hakkınız var!
+                            </Text>
                         )}
                         {status.nextFreeSpinAvailable && !status.canSpinForFree && (
                             <Text style={styles.nextSpinText}>
@@ -210,7 +285,7 @@ const WheelScreen = ({ navigation }) => {
                 {/* Wheel */}
                 <View style={styles.wheelContainer}>
                     <View style={styles.pointerContainer}>
-                        <View style={styles.pointer} />
+                        <View style={[styles.pointer, { borderBottomColor: theme.primary }]} />
                     </View>
                     <Animated.Image
                         source={wheelImage}
@@ -226,16 +301,31 @@ const WheelScreen = ({ navigation }) => {
 
                 {/* Spin Button */}
                 <View style={styles.buttonContainer}>
-                    <Button
-                        title={spinning ? 'Çevriliyor...' : 'Çarkı Çevir'}
-                        onPress={handleSpin}
-                        loading={spinning}
-                        disabled={!canSpin() || spinning}
+                    <Animated.View
                         style={[
-                            styles.spinButton,
-                            { backgroundColor: canSpin() && !spinning ? COLORS.MAIN : '#666' },
-                        ]}
-                    />
+                            styles.spinButtonWrapper,
+                            {
+                                transform: [
+                                    { scale: spinButtonScale },
+                                ],
+                                shadowColor: canSpin() && !spinning ? theme.primary : 'transparent',
+                                shadowOffset: { width: 0, height: 0 },
+                                shadowOpacity: 0.5,
+                                shadowRadius: 12,
+                                elevation: canSpin() && !spinning ? 8 : 0,
+                            },
+                        ]}>
+                        <Button
+                            title={spinning ? 'Çevriliyor...' : 'Çarkı Çevir'}
+                            onPress={handleSpin}
+                            loading={spinning}
+                            disabled={!canSpin() || spinning}
+                            style={[
+                                styles.spinButton,
+                                { backgroundColor: canSpin() && !spinning ? theme.primary : '#666' },
+                            ]}
+                        />
+                    </Animated.View>
                     {!canSpin() && status && (
                         <Text style={styles.cannotSpinText}>
                             Şu an ücretsiz hakkınız yok ve yeterli jetonunuz bulunmuyor.
@@ -465,6 +555,10 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         alignItems: 'center',
+    },
+    spinButtonWrapper: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     spinButton: {
         minWidth: 200,

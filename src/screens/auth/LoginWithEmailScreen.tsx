@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Input, Text } from '../../components';
+import TermsModal from '../../components/TermsModal';
 import useAuthStore from '../../store/authStore';
 import { COLORS } from '../../utils/constants';
 
@@ -18,6 +19,8 @@ const LoginWithEmailScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [showTermsModal, setShowTermsModal] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
     const { login, isLoading } = useAuthStore();
 
@@ -120,10 +123,33 @@ const LoginWithEmailScreen = ({ navigation }) => {
                                 <Text style={styles.linkText}>Kayıt Ol</Text>
                             </TouchableOpacity>
                         </View>
+
+                        {/* Terms Links */}
+                        <View style={styles.termsLinks}>
+                            <TouchableOpacity onPress={() => setShowTermsModal(true)}>
+                                <Text style={styles.termsLink}>Kullanıcı Sözleşmesi</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.termsSeparator}> • </Text>
+                            <TouchableOpacity onPress={() => setShowPrivacyModal(true)}>
+                                <Text style={styles.termsLink}>Gizlilik Politikası</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                 </ScrollView>
             </KeyboardAvoidingView>
+
+            {/* Terms Modals */}
+            <TermsModal
+                visible={showTermsModal}
+                type="terms"
+                onClose={() => setShowTermsModal(false)}
+            />
+            <TermsModal
+                visible={showPrivacyModal}
+                type="privacy"
+                onClose={() => setShowPrivacyModal(false)}
+            />
         </SafeAreaView>
     );
 };
@@ -189,6 +215,23 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         color: COLORS.SECOND,
         textColor: COLORS.SECOND,
+    },
+    termsLinks: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    termsLink: {
+        fontSize: 12,
+        color: COLORS.MAIN,
+        textDecorationLine: 'underline',
+    },
+    termsSeparator: {
+        fontSize: 12,
+        color: COLORS.SECOND,
+        opacity: 0.6,
     },
 });
 

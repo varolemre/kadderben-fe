@@ -35,11 +35,16 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>Kahve fincanı fotoğrafını çekebilmemiz için kamera erişimine ihtiyacımız var.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Kahve fincanı fotoğrafını seçebilmeniz için fotoğraf albümüne erişime ihtiyacımız var.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>RedHatDisplay-Regular.ttf</string>
+		<string>Ionicons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

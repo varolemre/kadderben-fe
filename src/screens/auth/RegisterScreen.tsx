@@ -12,7 +12,9 @@ import {
     Easing,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Input, Text } from '../../components';
+import { Button, Input, Text, Switch } from '../../components';
+import { Text as RNText } from 'react-native';
+import TermsModal from '../../components/TermsModal';
 import useAuthStore from '../../store/authStore';
 import { COLORS } from '../../utils/constants';
 
@@ -24,6 +26,8 @@ const RegisterScreen = ({ navigation }) => {
         fullName: '',
     });
     const [errors, setErrors] = useState({});
+    const [showTermsModal, setShowTermsModal] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const screenFade = useRef(new Animated.Value(0)).current;
     const contentSlide = useRef(new Animated.Value(20)).current;
 
@@ -56,27 +60,27 @@ const RegisterScreen = ({ navigation }) => {
         const newErrors = {};
 
         if (!formData.fullName.trim()) {
-            newErrors.fullName = 'Full name is required';
+            newErrors.fullName = 'Ad soyad gereklidir';
         } else if (formData.fullName.trim().length < 2) {
-            newErrors.fullName = 'Full name must be at least 2 characters';
+            newErrors.fullName = 'Ad soyad en az 2 karakter olmalıdır';
         }
 
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = 'E-posta gereklidir';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid';
+            newErrors.email = 'Geçerli bir e-posta adresi giriniz';
         }
 
         if (!formData.password) {
-            newErrors.password = 'Password is required';
+            newErrors.password = 'Şifre gereklidir';
         } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
+            newErrors.password = 'Şifre en az 6 karakter olmalıdır';
         }
 
         if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Please confirm your password';
+            newErrors.confirmPassword = 'Şifre onayı gereklidir';
         } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match';
+            newErrors.confirmPassword = 'Şifreler eşleşmiyor';
         }
 
         setErrors(newErrors);
@@ -126,25 +130,25 @@ const RegisterScreen = ({ navigation }) => {
                             </TouchableOpacity>
 
                             <View style={styles.header}>
-                                <Text style={styles.title}>Create Account</Text>
-                                <Text style={styles.subtitle}>Sign up to get started</Text>
+                                <Text style={styles.title}>Hesap Oluştur</Text>
+                                <Text style={styles.subtitle}>Başlamak için kayıt olun</Text>
                             </View>
 
                             <View style={styles.form}>
                                 <Input
-                                    label="Full Name"
+                                    label="Ad Soyad"
                                     value={formData.fullName}
                                     onChangeText={text => updateField('fullName', text)}
-                                    placeholder="Enter your full name"
+                                    placeholder="Adınızı ve soyadınızı girin"
                                     autoCapitalize="words"
                                     error={errors.fullName}
                                 />
 
                                 <Input
-                                    label="Email"
+                                    label="E-posta"
                                     value={formData.email}
                                     onChangeText={text => updateField('email', text)}
-                                    placeholder="Enter your email"
+                                    placeholder="E-posta adresinizi girin"
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     error={errors.email}
@@ -152,36 +156,65 @@ const RegisterScreen = ({ navigation }) => {
                                 />
 
                                 <Input
-                                    label="Password"
+                                    label="Şifre"
                                     value={formData.password}
                                     onChangeText={text => updateField('password', text)}
-                                    placeholder="Create a password"
+                                    placeholder="Şifre oluşturun"
                                     secureTextEntry
                                     showPasswordToggle
                                     error={errors.password}
                                 />
 
                                 <Input
-                                    label="Confirm Password"
+                                    label="Şifre Onayı"
                                     value={formData.confirmPassword}
                                     onChangeText={text => updateField('confirmPassword', text)}
-                                    placeholder="Confirm your password"
+                                    placeholder="Şifrenizi onaylayın"
                                     secureTextEntry
                                     showPasswordToggle
                                     error={errors.confirmPassword}
                                 />
 
+                                {/* Terms and Privacy */}
+                                <View style={styles.termsContainer}>
+                                <View style={styles.termsRow}>
+ 
+  
+  <Text style={[styles.termsText, { flex: 1}]}>
+  Kaydolarak{' '}
+    <Text 
+      style={styles.termsLink}
+      onPress={() => setShowPrivacyModal(true)}
+    >
+      Gizlilik Politikası
+    </Text>
+    {' '}ve{' '}
+    <Text 
+      style={styles.termsLink}
+      onPress={() => setShowTermsModal(true)}
+    >
+      Kullanım Koşulları
+    </Text>
+    {' '}metinlerini kabul etmiş olursunuz.
+  </Text>
+</View>
+
+                                    {errors.terms && (
+                                        <Text style={styles.errorText}>{errors.terms}</Text>
+                                    )}
+                                </View>
+
                                 <Button
-                                    title="Sign Up"
+                                    title="Kayıt Ol"
                                     onPress={handleRegister}
                                     loading={isLoading}
                                     style={[styles.registerButton, { backgroundColor: COLORS.MAIN }]}
                                 />
 
                                 <View style={styles.footer}>
-                                    <Text style={styles.footerText}>Already have an account? </Text>
+                                    <Text style={styles.footerText}>Zaten hesabınız var mı? </Text>
                                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                                        <Text style={styles.linkText}>Sign In</Text>
+                                        <Text style={styles.linkText}>Giriş Yap</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -189,6 +222,18 @@ const RegisterScreen = ({ navigation }) => {
 
                     </ScrollView>
                 </KeyboardAvoidingView>
+
+                {/* Terms Modals */}
+                <TermsModal
+                    visible={showTermsModal}
+                    type="terms"
+                    onClose={() => setShowTermsModal(false)}
+                />
+                <TermsModal
+                    visible={showPrivacyModal}
+                    type="privacy"
+                    onClose={() => setShowPrivacyModal(false)}
+                />
             </SafeAreaView>
         </Animated.View>
     );
@@ -258,6 +303,40 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#FFFFFF',
         fontWeight: '600',
+    },
+    termsContainer: {
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    termsRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+      },
+      termsText: {
+        fontSize: 13,
+        color: COLORS.SECOND,
+        lineHeight: 20,
+      },
+      
+    switch: {
+        marginRight: 12,
+    },
+    termsText: {
+        fontSize: 13,
+        color: COLORS.SECOND,
+        lineHeight: 20,
+    },
+    termsLink: {
+        fontSize: 13,
+        color: COLORS.MAIN,
+        textDecorationLine: 'underline',
+    },
+    errorText: {
+        fontSize: 12,
+        color: '#FF6B6B',
+        marginTop: 4,
+        marginLeft: 44,
     },
 });
 

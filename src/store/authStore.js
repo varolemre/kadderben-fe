@@ -48,6 +48,19 @@ const useAuthStore = create((set, get) => ({
                         isLoading: false,
                         shouldShowOnboarding: false,
                     });
+                    
+                    // Refresh user info from backend to get latest jeton count
+                    try {
+                        const refreshResponse = await authApi.getUserInfo();
+                        if (refreshResponse.success && refreshResponse.data) {
+                            const freshUserInfo = refreshResponse.data;
+                            await saveUser(freshUserInfo);
+                            set({ user: freshUserInfo });
+                        }
+                    } catch (error) {
+                        console.error('Error refreshing user on init:', error);
+                        // Don't fail init if refresh fails, use cached user
+                    }
                 }
             } else {
                 set({ isLoading: false, shouldShowOnboarding: false });
@@ -187,6 +200,26 @@ const useAuthStore = create((set, get) => ({
         const updatedUser = { ...get().user, ...userData };
         await saveUser(updatedUser);
         set({ user: updatedUser });
+    },
+
+    /**
+     * Refresh user info from backend
+     */
+    refreshUser: async () => {
+        try {
+            const response = await authApi.getUserInfo();
+            if (response.success && response.data) {
+                const userInfo = response.data;
+                // Update user in storage and state
+                await saveUser(userInfo);
+                set({ user: userInfo });
+                return { success: true, user: userInfo };
+            }
+            return { success: false };
+        } catch (error) {
+            console.error('Error refreshing user:', error);
+            return { success: false, error: error.message || 'Failed to refresh user' };
+        }
     },
 
     /**

@@ -7,3 +7,5 @@ export { default as Text } from './Text';
 export { default as TextInput } from './TextInput';
 export { default as StorySection } from './StorySection';
 export { default as FortuneCard } from './FortuneCard';
+export { default as ErrorPopup } from './ErrorPopup';
+export { default as TermsModal } from './TermsModal';

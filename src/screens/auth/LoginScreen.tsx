@@ -7,9 +7,11 @@ import {
     Image,
     Animated,
     Easing,
+    TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Text } from '../../components';
+import TermsModal from '../../components/TermsModal';
 import { COLORS } from '../../utils/constants';
 
 const welcomeImage = require('../../assets/welcomePicture.png');
@@ -135,6 +137,8 @@ const FloatingParticle = ({ delay, index }) => {
 };
 
 const LoginScreen = ({ navigation }) => {
+    const [showTermsModal, setShowTermsModal] = React.useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = React.useState(false);
     const screenFade = useRef(new Animated.Value(0)).current;
     const titleFade = useRef(new Animated.Value(0)).current;
     const subtitleFade = useRef(new Animated.Value(0)).current;
@@ -262,9 +266,32 @@ const LoginScreen = ({ navigation }) => {
                             style={styles.oauthButton}
                             textStyle={styles.oauthButtonText}
                         />
+
+                        {/* Terms Links */}
+                        <View style={styles.termsLinks}>
+                            <TouchableOpacity onPress={() => setShowTermsModal(true)}>
+                                <Text style={styles.termsLink}>Kullanıcı Sözleşmesi</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.termsSeparator}> • </Text>
+                            <TouchableOpacity onPress={() => setShowPrivacyModal(true)}>
+                                <Text style={styles.termsLink}>Gizlilik Politikası</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
+
+            {/* Terms Modals */}
+            <TermsModal
+                visible={showTermsModal}
+                type="terms"
+                onClose={() => setShowTermsModal(false)}
+            />
+            <TermsModal
+                visible={showPrivacyModal}
+                type="privacy"
+                onClose={() => setShowPrivacyModal(false)}
+            />
         </SafeAreaView>
         </Animated.View>
     );
@@ -385,6 +412,22 @@ const styles = StyleSheet.create({
     },
     oauthButtonText: {
         color: '#FFFFFF',
+    },
+    termsLinks: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    termsLink: {
+        fontSize: 12,
+        color: COLORS.MAIN,
+        textDecorationLine: 'underline',
+    },
+    termsSeparator: {
+        fontSize: 12,
+        color: '#FFFFFF',
+        opacity: 0.6,
     },
 });
 

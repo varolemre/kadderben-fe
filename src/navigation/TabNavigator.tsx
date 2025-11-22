@@ -2,15 +2,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Text } from '../components';
 import { COLORS } from '../utils/constants';
 
 // Screens
 import HomeStackNavigator from './HomeStackNavigator';
+import ProfileStackNavigator from './ProfileStackNavigator';
 import HoroscopeScreen from '../screens/horoscope/HoroscopeScreen';
 import RitualScreen from '../screens/ritual/RitualScreen';
 import BlogScreen from '../screens/blog/BlogScreen';
-import ProfileScreen from '../screens/profile/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,11 @@ const TabNavigator = () => {
                 component={HomeStackNavigator}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <Text style={[styles.icon, { color }]}>🏠</Text>
+                        <Icon 
+                            name={focused ? 'home' : 'home-outline'} 
+                            size={28} 
+                            color={color} 
+                        />
                     ),
                 }}
             />
@@ -38,7 +43,11 @@ const TabNavigator = () => {
                 component={HoroscopeScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <Text style={[styles.icon, { color }]}>🌟</Text>
+                        <Icon 
+                            name={focused ? 'moon' : 'moon-outline'} 
+                            size={28} 
+                            color={color} 
+                        />
                     ),
                 }}
             />
@@ -49,7 +58,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ color, focused }) => (
                         <View style={styles.centerButton}>
                             <View style={[styles.centerButtonInner, { backgroundColor: COLORS.MAIN }]}>
-                                <Text style={styles.centerIcon}>⭐</Text>
+                                <Icon name="sparkles" size={28} color="#FFFFFF" />
                             </View>
                         </View>
                     ),
@@ -66,16 +75,24 @@ const TabNavigator = () => {
                 component={BlogScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <Text style={[styles.icon, { color }]}>📰</Text>
+                        <Icon 
+                            name={focused ? 'book' : 'book-outline'} 
+                            size={28} 
+                            color={color} 
+                        />
                     ),
                 }}
             />
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
+                component={ProfileStackNavigator}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <Text style={[styles.icon, { color }]}>👤</Text>
+                        <Icon 
+                            name={focused ? 'person' : 'person-outline'} 
+                            size={28} 
+                            color={color} 
+                        />
                     ),
                 }}
             />
@@ -86,15 +103,15 @@ const TabNavigator = () => {
 const styles = StyleSheet.create({
     tabBar: {
         height: 70,
-        paddingBottom: 25,
-        paddingTop: 10,
+        paddingBottom: 20,
+        paddingTop: 12,
         backgroundColor: COLORS.BACKGROUND,
         borderTopWidth: 0.5,
         borderTopColor: '#E5E5EA',
         position: 'absolute',
     },
     icon: {
-        fontSize: 24,
+        fontSize: 28,
     },
     centerButtonContainer: {
         justifyContent: 'center',
